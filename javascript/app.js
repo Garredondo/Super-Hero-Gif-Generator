@@ -3,52 +3,46 @@ $(document).ready(function () {
     // starting the superhero array
     var topics = ["Superman", "Catwoman", "Batman", "Wonder Woman"];
 
-    //display the gifs and information
+    //display the gifs and rating information
     function displayGifs() {
         var supHero = $(this).attr("data-name");
-    
+
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + supHero + "&limit=10&api_key=1Z1iJvsoiDao72O3mdWqCaTmBa2kFZ7c";
 
         //ajax call
         $.ajax({
             url: queryURL,
             method: "GET"
-        }).then(function(response){
-            //storing the rating details
-            
-            var rating = response.data[0].rating;
-            
-            //creating an element to dispaly rating
-            
-            var pRating = $("<p>").text("Rating: " + rating);
-            
-            //display the rating
-            
-            $("#display-gifs").append(pRating);
+        }).then(function (response) {
 
-            //retrieving the url for the image
-            
-            var gifURL = response.data[0].images.fixed_width_small_still.url;
-            
-            // creating an element to hold the image
-            
-            // var gif = $("<img>").attr("src= " + gifURL);
-            var gif = $("<img src=" + gifURL + ">");
-                // in need to add an "alt"
-                // i need to figure out how to loop through the object
-                // i need to 
-            
-            // appending the images
-            
-            $("#display-gifs").prepend(gif);
+            var results = response.data;
+            console.log(results);
 
+            for (var i = 0; i < results.length; i++) {
+                    //retrieving the urls for the image (still/animated)
+                    // animated version
+                var gifURL = results[i].images.downsized.url;
+                    // still version
+                var gifStillURL = results[i].images.downsized_still.url;
+                
+                var gif = $("<div><img src='" + gifStillURL + "'data-animate='" + gifURL + "'data-still='" + gifStillURL + "'></div>");
+                // adding a class to reference when I create an on-click event for all the gifs the program generates
+                gif.addClass("generated-gif");
 
-            //putting new character info above the rest
-            $("#display-gifs").prepend(characterDiv);
+                //storing the rating details
+                var rating = results[i].rating;
+                //creating an element to dispaly rating      
+                var pRating = $("<p>").text("Rating: " + rating);
+                // created the div on line 37 becuase I couldn't append text to the img tag
+                gif.append(pRating);
+
+                // appending the images
+                $("#display-gifs-here").prepend(gif);
+            }
         });
     }
 
-    
+
     //function to create buttons
     function renderButtons() {
         //Delete buttons prior to adding new information
@@ -69,18 +63,44 @@ $(document).ready(function () {
         }
     }
 
-    //Function handles when add superhero button is clicked
-    $("#add-superhero").on("click", function(event){
+    // function to add superhero button is clicked
+    $("#add-superhero").on("click", function (event) {
         event.preventDefault();
         var additionalSuperhero = $("#superhero-input").val().trim();
-        topics.push(additionalSuperhero);
-        renderButtons();
+    
+        // this ensures that the function will only run if the user has input a string 
+        if(additionalSuperhero === ""){
+            console.log("Add a Superhero!");
+        } else {
+            topics.push(additionalSuperhero);
+            renderButtons();
+        }
+        
     })
 
-
-    //Adding a click event listener to all elements with a class superhero-button
+    // adding a click event listener to all elements with a class superhero-button 
     $(document).on("click", ".superhero-button", displayGifs);
-    
+
+    // event for when you click something with the class .generated-gif in the display-gifs-here section... the function should run
+    $("#display-gifs-here").on("click", ".generated-gif", function(){
+        // gives the gives an attibute of  "state" when clicked
+        var state = $(this).attr("data-state");
+        // if the state is still...
+        if (state === "still"){
+            // change the source URL to the animated version
+            $(this).attr("src=", $(this).attr("data-animate"));
+            // change the state to animate
+            $(this).attr("data-state", "animate");
+        }
+        else {
+            // change the source URL to still version
+            $(this).attr("src=", $(this).attr("data-still"));
+            // change the state to still
+            $(this).attr("data-state", "still");
+        }
+
+    })
+
     //Calling the function to display the intital buttons on the page
     renderButtons();
 });
