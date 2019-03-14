@@ -15,10 +15,10 @@ h1{
     font-family: 'Titan One', cursive;
 }
 
-#display-gifs {
+/* #display-gifs {
     border-style: solid;
     border-color: blue;
-}
+} */
 
 #add-superhero,
 #display-buttons,
@@ -29,6 +29,8 @@ h1{
 
 #superhero-input{
     border-style: solid;
+    border-color: red;
     text-align: center;
+
 }
 

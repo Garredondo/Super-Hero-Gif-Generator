@@ -62,8 +62,8 @@ $(document).ready(function () {
             B.text(topics[i]);
             //appending the new buttons to the DOM
             $("#display-buttons").append(B);
-
         }
+        $("#superhero-input").val("");
     }
 
     // function to add superhero button is clicked
@@ -77,6 +77,7 @@ $(document).ready(function () {
         } else {
             topics.push(additionalSuperhero);
             renderButtons();
+
         }
         
     })
@@ -106,4 +107,5 @@ $(document).ready(function () {
 
     //Calling the function to display the intital buttons on the page
     renderButtons();
+    
 });
