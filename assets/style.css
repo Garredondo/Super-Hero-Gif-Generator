@@ -1,10 +1,12 @@
-/* html,
+html,
 body {
-    background-color: rgb(248, 248, 3);
-} */
+    background-color: #feffa9;
+}
 
 .jumbotron {
     background-color: transparent;
+    margin-bottom: 0px;
+    padding-bottom: 30px;
 }
 
 h1{
@@ -18,6 +20,7 @@ h1{
     border-color: blue;
 }
 
+#add-superhero,
 #display-buttons,
 .superhero-button{
     padding: 10px;
@@ -26,4 +29,6 @@ h1{
 
 #superhero-input{
     border-style: solid;
+    text-align: center;
 }
+

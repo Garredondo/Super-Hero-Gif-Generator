@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    
     // starting the superhero array
     var topics = ["Superman", "Catwoman", "Batman", "Wonder Woman"];
 
@@ -14,7 +14,9 @@ $(document).ready(function () {
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-
+            // creating characterDiv to hold both the image and rating of each gif
+            var characterDiv = $("<div id='container'>");
+            // =================================== 
             var results = response.data;
             console.log(results);
 
@@ -25,19 +27,20 @@ $(document).ready(function () {
                     // still version
                 var gifStillURL = results[i].images.downsized_still.url;
                 
-                var gif = $("<div><img src='" + gifStillURL + "'data-animate='" + gifURL + "'data-still='" + gifStillURL + "'></div>");
+                var gif = $("<img src='" + gifStillURL + "'data-animate='" + gifURL + "'data-still='" + gifStillURL + "'>");
                 // adding a class to reference when I create an on-click event for all the gifs the program generates
                 gif.addClass("generated-gif");
 
-                //storing the rating details
+                characterDiv.append(gif);
+                // ===== Rating ==== storing the rating details
                 var rating = results[i].rating;
                 //creating an element to dispaly rating      
                 var pRating = $("<p>").text("Rating: " + rating);
-                // created the div on line 37 becuase I couldn't append text to the img tag
-                gif.append(pRating);
-
+                // appending the rating to the charcterDiv because I could not append to the image
+                characterDiv.append(pRating);
+                
                 // appending the images
-                $("#display-gifs-here").prepend(gif);
+                $("#display-gifs-here").prepend(characterDiv);
             }
         });
     }
@@ -78,6 +81,7 @@ $(document).ready(function () {
         
     })
 
+
     // adding a click event listener to all elements with a class superhero-button 
     $(document).on("click", ".superhero-button", displayGifs);
 
@@ -88,17 +92,16 @@ $(document).ready(function () {
         // if the state is still...
         if (state === "still"){
             // change the source URL to the animated version
-            $(this).attr("src=", $(this).attr("data-animate"));
+            $(this).attr("src", $(this).attr("data-animate"));
             // change the state to animate
             $(this).attr("data-state", "animate");
         }
         else {
             // change the source URL to still version
-            $(this).attr("src=", $(this).attr("data-still"));
+            $(this).attr("src", $(this).attr("data-still"));
             // change the state to still
             $(this).attr("data-state", "still");
         }
-
     })
 
     //Calling the function to display the intital buttons on the page
